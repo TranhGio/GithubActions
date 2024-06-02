@@ -1,13 +1,36 @@
 name: learn github action
 run-name: ${{ github.actor }} is learning Github Actions
-on: [push]
+on:
+  workflow_dispatch:
+    inputs:
+      build_scheme:
+        description: 'Build scheme'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - develop
+          - staging
+          - production
+      file_extension:
+        description: 'File extension'
+        required: false
+        default: 'txt'
+        type: string
+
 jobs:
     check-bats-version:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
-              with:
-                node-version: '20'
-            - run: npm install -g bats
-            - run: bats --version
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+        - uses: actions/setup-node@v4
+          with:
+            node-version: '20'
+        - run: npm install -g bats
+        - run: bats --version
+    download-from-aws-s3:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Download the latest "${{ vars.FILE_NAME }}" file in S3 bucket
+          run: |
+            aws s3 cp s3://${{ secrets.BUCKET_NAME }}/${{ inputs.build_scheme }}/${{ vars.FILE_NAME }}.${{ inputs.file_extension }} .
