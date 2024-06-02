@@ -34,3 +34,6 @@ jobs:
         - name: Download the latest "${{ vars.FILE_NAME }}" file in S3 bucket
           run: |
             aws s3 cp s3://${{ secrets.BUCKET_NAME }}/${{ inputs.build_scheme }}/${{ vars.FILE_NAME }}.${{ inputs.file_extension }} .
+          env:
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
