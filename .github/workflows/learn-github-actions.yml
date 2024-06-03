@@ -33,8 +33,9 @@ jobs:
       steps:
         - name: Download the latest "${{ vars.FILE_NAME }}" file in S3 bucket
           run: |
-            aws s3 cp s3://${{ secrets.BUCKET_NAME }}/${{ inputs.build_scheme }}/${{ vars.FILE_NAME }}.${{ inputs.file_extension }} .
-            cat ${{ vars.FILE_NAME }}.${{ inputs.file_extension }}
+            chosen_folder=(aws s3 ls s3://${{ secrets.BUCKET_NAME }}/${{ inputs.build_scheme }}| awk '{print $2}' | grep '1.19' | sort -r | head -1)
+            echo $chosen_folder
+            echo 'This is $chosen_folder'
           env:
             AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
