@@ -39,10 +39,13 @@ jobs:
             
             if [[ ${{ inputs.build_scheme }} == "staging" ]]
             then
+              file_extension='.vinh'
               echo "your file is staging"
             else
+              file_extension='.vinh1'
               echo "your file is not staging"
             fi
+            echo "file_extension is $file_extension"
           env:
             AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
